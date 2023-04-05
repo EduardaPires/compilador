@@ -33,7 +33,7 @@ public class Lexico {
         }        
     }
     
-    //Retorna próximo char
+    //Retorna próximo char teste
     private char nextChar(){
         return this.conteudo[this.indiceConteudo++];
     }
