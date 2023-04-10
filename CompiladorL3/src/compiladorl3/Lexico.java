@@ -69,7 +69,7 @@ public class Lexico {
         StringBuffer lexema = new StringBuffer();
         while(this.hasNextChar()){
             c = this.nextChar(); //ver porque n le tudo!!!         
-            switch(estado){ //identificador, int, real, char especial; falta: op relacional, char, atribuicao, p. reservada, op aritmetico
+            switch(estado){ //identificador, int, real, char especial; falta: op relacional, p. reservada, op aritmetico
                 case 0:
                     if(c == ' ' || c == '\t' || c == '\n' || c == '\r' ){ //caracteres de espaço em branco ASCII tradicionais 
                         estado = 0;
@@ -82,16 +82,18 @@ public class Lexico {
                         lexema.append(c);
                         estado = 2;
                     }
-                     else if ((this.isLetra(c)||this.isDigito(c)) && this.hasNextChar() == false){//como diferenciar de um identificador caso comece com digito
+                     else if (c == '\''){//char
                          lexema.append(c);
                          estado = 6; //char
                      }
-                    // else if ((this.isLetra(c)||this.isDigito(c)) && this.hasNextChar() == false){//como diferenciar de um identificador caso comece com digito
-
                     else if(c == ')' || c == '(' || c == '{' || c == '}' || c == ',' ||c == ';'){//char especial
                         lexema.append(c);
                         estado = 5;
                     } 
+                    else if (c == '=' || c == '<' || c == '>' || c == '!'){
+                        lexema.append(c);
+                        estado = 8;
+                    }
                     else if(c == '$'){//fim
                         lexema.append(c);
                         estado = 99;
@@ -145,11 +147,27 @@ public class Lexico {
                     this.back();
                     return new Token(lexema.toString(), Token.TIPO_CARACTER_ESPECIAL); 
                 case 6:
-                    this.back();
-                    return new Token(lexema.toString(), Token.TIPO_CHAR);
-                //case 7:
-                   // this.back();
-                    //return new Token(lexema.toString(), Token.TIPO_REAL);
+                    if(this.isDigito(c) && this.isLetra(c)){
+                        lexema.append(c);
+                        estado = 7;
+                    }
+                case 7:
+                    if (c== '\'') {
+                        this.back();
+                        return new Token(lexema.toString(), Token.TIPO_CHAR);
+                    }
+                    else {
+                        throw new RuntimeException("Erro: char inválido \"" + lexema.toString() + "\"");
+                    }
+                case 8:
+                    if (c == '=') {
+                        this.back();
+                        return new Token(lexema.toString(), Token.TIPO_OPERADOR_RELACIONAL); 
+                    }
+                    else {
+                        this.back();
+                        return new Token(lexema.toString(), Token.TIPO_OPERADOR_RELACIONAL); 
+                    }
                 case 99:
                     return new Token(lexema.toString(), Token.TIPO_FIM_CODIGO); 
             }
