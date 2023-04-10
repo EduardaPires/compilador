@@ -18,6 +18,8 @@ public class Token {
     public static int TIPO_OPERADOR_ARITMETICO = 5;
     public static int TIPO_CARACTER_ESPECIAL = 6;
     public static int TIPO_PALAVRA_RESERVADA = 7;
+    public static int TIPO_SALTADOR = 8;
+    public static int TIPO_CATEGORIZADOR = 9;
     public static int TIPO_FIM_CODIGO = 99;
     
     private int tipo; //tipo do token
