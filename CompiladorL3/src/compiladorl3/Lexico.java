@@ -43,6 +43,8 @@ public class Lexico {
         return indiceConteudo < this.conteudo.length;
     }
     
+
+
     //Retrocede o índice que aponta para o "char da vez" em uma unidade
     private void back(){
         this.indiceConteudo--;
@@ -66,29 +68,31 @@ public class Lexico {
         
         StringBuffer lexema = new StringBuffer();
         while(this.hasNextChar()){
-            c = this.nextChar();            
-            switch(estado){
+            c = this.nextChar(); //ver porque n le tudo!!!         
+            switch(estado){ //identificador, int, real, char especial; falta: op relacional, char, atribuicao, p. reservada, op aritmetico
                 case 0:
                     if(c == ' ' || c == '\t' || c == '\n' || c == '\r' ){ //caracteres de espaço em branco ASCII tradicionais 
                         estado = 0;
                     }
-                    else if(this.isLetra(c) || c == '_'){
+                    else if(this.isLetra(c) || c == '_'){ //id
                         lexema.append(c);
                         estado = 1;
                     }
-                    else if(this.isDigito(c)){
+                    else if(this.isDigito(c)){ //real ou int
                         lexema.append(c);
                         estado = 2;
                     }
-                    else if(c == ')' || 
-                            c == '(' ||
-                            c == '{' ||
-                            c == '}' ||
-                            c == ',' ||
-                            c == ';'){
+                     else if ((this.isLetra(c)||this.isDigito(c)) && this.hasNextChar() == false){//como diferenciar de um identificador caso comece com digito
+                         lexema.append(c);
+                         estado = 6; //char
+                     }
+                    // else if ((this.isLetra(c)||this.isDigito(c)) && this.hasNextChar() == false){//como diferenciar de um identificador caso comece com digito
+
+                    else if(c == ')' || c == '(' || c == '{' || c == '}' || c == ',' ||c == ';'){//char especial
                         lexema.append(c);
                         estado = 5;
-                    }else if(c == '$'){
+                    } 
+                    else if(c == '$'){//fim
                         lexema.append(c);
                         estado = 99;
                         this.back();
@@ -113,7 +117,8 @@ public class Lexico {
                     }else if(c == '.'){
                         lexema.append(c);
                         estado = 3;
-                    }else{
+                    }
+                    else {
                         this.back();
                         return new Token(lexema.toString(), Token.TIPO_INTEIRO);
                     }
@@ -129,8 +134,9 @@ public class Lexico {
                 case 4:
                     if(this.isDigito(c)){
                         lexema.append(c);
-                        estado = 4;
-                    }else{
+                        estado = 7;
+                    }
+                    else {
                         this.back();
                         return new Token(lexema.toString(), Token.TIPO_REAL);
                     }
@@ -138,6 +144,12 @@ public class Lexico {
                 case 5:
                     this.back();
                     return new Token(lexema.toString(), Token.TIPO_CARACTER_ESPECIAL); 
+                case 6:
+                    this.back();
+                    return new Token(lexema.toString(), Token.TIPO_CHAR);
+                //case 7:
+                   // this.back();
+                    //return new Token(lexema.toString(), Token.TIPO_REAL);
                 case 99:
                     return new Token(lexema.toString(), Token.TIPO_FIM_CODIGO); 
             }
