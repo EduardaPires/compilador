@@ -82,10 +82,12 @@ public class Lexico {
                         lexema.append(c);
                         estado = 2;
                     }
-                    else if ((this.isLetra(c)||this.isDigito(c)) && this.hasNextChar() == false){//como diferenciar de um identificador caso comece com digito
-                        lexema.append(c);
-                        estado = 6; //char
-                    }
+                     else if ((this.isLetra(c)||this.isDigito(c)) && this.hasNextChar() == false){//como diferenciar de um identificador caso comece com digito
+                         lexema.append(c);
+                         estado = 6; //char
+                     }
+                    // else if ((this.isLetra(c)||this.isDigito(c)) && this.hasNextChar() == false){//como diferenciar de um identificador caso comece com digito
+
                     else if(c == ')' || c == '(' || c == '{' || c == '}' || c == ',' ||c == ';'){//char especial
                         lexema.append(c);
                         estado = 5;
