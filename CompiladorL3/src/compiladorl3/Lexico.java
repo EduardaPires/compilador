@@ -69,7 +69,7 @@ public class Lexico {
         StringBuffer lexema = new StringBuffer();
         while(this.hasNextChar()){
             c = this.nextChar(); //ver porque n le tudo!!!         
-            switch(estado){ //identificador, int, real, char especial; falta: p. reservada, op aritmetico
+            switch(estado){ //falta atribuição e tokens criados
                 case 0:
                     if(c == ' ' || c == '\t' || c == '\n' || c == '\r' ){ //caracteres de espaço em branco ASCII tradicionais 
                         estado = 0;
@@ -98,7 +98,14 @@ public class Lexico {
                         lexema.append(c);
                         estado = 99;
                         this.back();
-                    }else{
+                    } else if (lexema.toString().compareTo("int")==0 || lexema.toString().compareTo("float")==0 || lexema.toString().compareTo("if")==0 || lexema.toString().compareTo("else")==0 || lexema.toString().compareTo("main")==0 || lexema.toString().compareTo("char")==0) {
+                        lexema.append(c);
+                        estado = 9;
+                    } else if (c == '+' || c == '-' || c == '*' || c == '/') {
+                        lexema.append(c);
+                        estado = 10;
+                    }
+                    else{
                         lexema.append(c);
                         throw new RuntimeException("Erro: token inválido \"" + lexema.toString() + "\"");
                     }
@@ -130,6 +137,7 @@ public class Lexico {
                         lexema.append(c);
                         estado = 4;
                     }else{
+                        lexema.append(c);
                         throw new RuntimeException("Erro: número float inválido \"" + lexema.toString() + "\"");
                     }
                     break;
@@ -146,19 +154,27 @@ public class Lexico {
                 case 5:
                     this.back();
                     return new Token(lexema.toString(), Token.TIPO_CARACTER_ESPECIAL); 
+                    //break;
                 case 6:
-                    if(this.isDigito(c) && this.isLetra(c)){
+                    if(this.isDigito(c) || this.isLetra(c)){
                         lexema.append(c);
                         estado = 7;
                     }
-                case 7:
-                    if (c== '\'') {
-                        this.back();
-                        return new Token(lexema.toString(), Token.TIPO_CHAR);
-                    }
                     else {
+                        lexema.append(c);
                         throw new RuntimeException("Erro: char inválido \"" + lexema.toString() + "\"");
                     }
+                    break;
+                case 7:
+                    if(c == '\''){
+                        lexema.append(c);
+                        estado = 11;
+                    }
+                    else {
+                        lexema.append(c);
+                        throw new RuntimeException("Erro: char inválido \"" + lexema.toString() + "\"");
+                    }
+                    break;
                 case 8:
                     if (c == '=') {
                         this.back();
@@ -168,8 +184,21 @@ public class Lexico {
                         this.back();
                         return new Token(lexema.toString(), Token.TIPO_OPERADOR_RELACIONAL); 
                     }
+                    //break;
+                case 9:
+                    this.back();
+                    return new Token(lexema.toString(), Token.TIPO_PALAVRA_RESERVADA); 
+                    //break;
+                case 10:
+                    this.back();
+                    return new Token(lexema.toString(), Token.TIPO_OPERADOR_ARITMETICO); 
+                    //break;
+                case 11:
+                    this.back();
+                    return new Token(lexema.toString(), Token.TIPO_CHAR);
                 case 99:
                     return new Token(lexema.toString(), Token.TIPO_FIM_CODIGO); 
+                    //break;
             }
         }                
         return token;

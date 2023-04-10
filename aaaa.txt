@@ -29,3 +29,5 @@ codigos e codigos
 
 tunnel:end //expõe o código (se n passar por begin, n faz diferença)
 metodo
+
+"C:\\C3\\compiladores\\compilador-1\\CompiladorL3\\src\\compiladorl3\\codigo.txt"
