@@ -68,7 +68,7 @@ public class Lexico {
         
         StringBuffer lexema = new StringBuffer();
         while(this.hasNextChar()){
-            c = this.nextChar();            
+            c = this.nextChar(); //ver porque n le tudo!!!         
             switch(estado){ //identificador, int, real, char especial; falta: op relacional, char, atribuicao, p. reservada, op aritmetico
                 case 0:
                     if(c == ' ' || c == '\t' || c == '\n' || c == '\r' ){ //caracteres de espaço em branco ASCII tradicionais 
@@ -132,8 +132,9 @@ public class Lexico {
                 case 4:
                     if(this.isDigito(c)){
                         lexema.append(c);
-                        estado = 4;
-                    }else{
+                        estado = 7;
+                    }
+                    else {
                         this.back();
                         return new Token(lexema.toString(), Token.TIPO_REAL);
                     }
@@ -144,6 +145,9 @@ public class Lexico {
                 case 6:
                     this.back();
                     return new Token(lexema.toString(), Token.TIPO_CHAR);
+                //case 7:
+                   // this.back();
+                    //return new Token(lexema.toString(), Token.TIPO_REAL);
                 case 99:
                     return new Token(lexema.toString(), Token.TIPO_FIM_CODIGO); 
             }
