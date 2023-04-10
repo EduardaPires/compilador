@@ -1,0 +1,31 @@
+fazer casos
+tokens (criar os nossos)
+
+nome do compilador: compila a dor
+tokens novos: expressão regular, máquina de estados e implementação
+#perf
+int valor = 10;
+máquina de estado geral com todos os tokens aceitos
+*adicionar cases faltantes e mensagens de erro (Mensagem deve ser específica: que tipo de erro? (ex. nome de variável inválida, operado lógico inválido, etc.))
+metodo que imprima todos os tokens e seus tipos (string reune os tokens)
+
+char especial, identificador, inteiro, real;
+char, op relacional, aritmetico, atribuição, p reservada, tokens novos
+
+
+#perf, #book -> categorizador
+
+#book String produto1 = "Mochileiro das galáxias"
+- categoriza valores de variaveis para poder filtra-las; muito util para área de dados
+
+tunnel:begin; tunnel:end -> saltador
+- código entre o tunel é ignorado; 
+
+if (true) { //se for falso n acontece tunelamento, se true, pula até o fim do tunel
+tunnel:begin}
+
+int metodo
+codigos e codigos
+
+tunnel:end //expõe o código (se n passar por begin, n faz diferença)
+metodo

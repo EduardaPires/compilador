@@ -1,25 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package compiladorl3;
 
-/**
- *
- * @author tarci
- */
+package compiladorl3;
 public class CompiladorL3 {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-        Lexico lexico = new Lexico("src\\compiladorl3\\codigo.txt");
-        Token t = null;
-        while((t = lexico.nextToken()) != null){
-            System.out.println(t.toString());
+        Lexico lexico = new Lexico("src\\compiladorl3\\codigo.txt"); //pega o arquivo txt como entrada
+        Token t = null; //inicialização do token (classe Token)
+        while((t = lexico.nextToken()) != null){ //enquanto o token não acabar, o próximo char será lido
+            System.out.println(t.toString()); //classe Token armazena os tipos de tokens
         }
 
 
