@@ -69,7 +69,7 @@ public class Lexico {
         StringBuffer lexema = new StringBuffer();
         while(this.hasNextChar()){
             c = this.nextChar(); //ver porque n le tudo!!!         
-            switch(estado){ //identificador, int, real, char especial; falta: op relacional, p. reservada, op aritmetico
+            switch(estado){ //identificador, int, real, char especial; falta: p. reservada, op aritmetico
                 case 0:
                     if(c == ' ' || c == '\t' || c == '\n' || c == '\r' ){ //caracteres de espaço em branco ASCII tradicionais 
                         estado = 0;
@@ -84,13 +84,13 @@ public class Lexico {
                     }
                      else if (c == '\''){//char
                          lexema.append(c);
-                         estado = 6; //char
+                         estado = 6; 
                      }
                     else if(c == ')' || c == '(' || c == '{' || c == '}' || c == ',' ||c == ';'){//char especial
                         lexema.append(c);
                         estado = 5;
                     } 
-                    else if (c == '=' || c == '<' || c == '>' || c == '!'){
+                    else if (c == '=' || c == '<' || c == '>' || c == '!'){ //op relacional
                         lexema.append(c);
                         estado = 8;
                     }
