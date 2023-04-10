@@ -74,6 +74,10 @@ public class Lexico {
                     if(c == ' ' || c == '\t' || c == '\n' || c == '\r' ){ //caracteres de espaço em branco ASCII tradicionais 
                         estado = 0;
                     }
+                    else if (lexema.toString().compareTo("int")==0 || lexema.toString().compareTo("float")==0 || lexema.toString().compareTo("if")==0 || lexema.toString().compareTo("else")==0 || lexema.toString().compareTo("main")==0 || lexema.toString().compareTo("char")==0) {
+                        lexema.append(c);
+                        estado = 9;
+                    }
                     else if(this.isLetra(c) || c == '_'){ //id
                         lexema.append(c);
                         estado = 1;
@@ -90,17 +94,18 @@ public class Lexico {
                         lexema.append(c);
                         estado = 5;
                     } 
-                    else if (c == '=' || c == '<' || c == '>' || c == '!'){ //op relacional
+                    else if (c == '<' || c == '>'){ //op relacional
                         lexema.append(c);
                         estado = 8;
+                    }
+                    else if (c == '='){
+                        lexema.append(c);
+                        estado = 12;
                     }
                     else if(c == '$'){//fim
                         lexema.append(c);
                         estado = 99;
                         this.back();
-                    } else if (lexema.toString().compareTo("int")==0 || lexema.toString().compareTo("float")==0 || lexema.toString().compareTo("if")==0 || lexema.toString().compareTo("else")==0 || lexema.toString().compareTo("main")==0 || lexema.toString().compareTo("char")==0) {
-                        lexema.append(c);
-                        estado = 9;
                     } else if (c == '+' || c == '-' || c == '*' || c == '/') {
                         lexema.append(c);
                         estado = 10;
@@ -162,7 +167,7 @@ public class Lexico {
                     }
                     else {
                         lexema.append(c);
-                        throw new RuntimeException("Erro: char inválido \"" + lexema.toString() + "\"");
+                        throw new RuntimeException("Erro: char mal formado \"" + lexema.toString() + "\"");
                     }
                     break;
                 case 7:
@@ -172,11 +177,12 @@ public class Lexico {
                     }
                     else {
                         lexema.append(c);
-                        throw new RuntimeException("Erro: char inválido \"" + lexema.toString() + "\"");
+                        throw new RuntimeException("Erro: char mal formado \"" + lexema.toString() + "\"");
                     }
                     break;
                 case 8:
                     if (c == '=') {
+                        lexema.append(c);
                         this.back();
                         return new Token(lexema.toString(), Token.TIPO_OPERADOR_RELACIONAL); 
                     }
@@ -196,6 +202,18 @@ public class Lexico {
                 case 11:
                     this.back();
                     return new Token(lexema.toString(), Token.TIPO_CHAR);
+                case 12:
+                    if (c == '=') {
+                        lexema.append(c);
+                        estado = 13;
+                    }
+                    else {
+                        this.back();
+                        return new Token(lexema.toString(), Token.TIPO_OPERADOR_ATRIBUICAO);
+                    }
+                case 13:
+                    this.back();
+                    return new Token(lexema.toString(), Token.TIPO_OPERADOR_RELACIONAL);
                 case 99:
                     return new Token(lexema.toString(), Token.TIPO_FIM_CODIGO); 
                     //break;

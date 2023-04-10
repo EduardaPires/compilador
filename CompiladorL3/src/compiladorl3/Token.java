@@ -20,6 +20,7 @@ public class Token {
     public static int TIPO_PALAVRA_RESERVADA = 7;
     public static int TIPO_SALTADOR = 8;
     public static int TIPO_CATEGORIZADOR = 9;
+    public static int TIPO_OPERADOR_ATRIBUICAO = 10;
     public static int TIPO_FIM_CODIGO = 99;
     
     private int tipo; //tipo do token
@@ -58,11 +59,19 @@ public class Token {
                 return this.lexema + " - CARACTER_ESPECIAL";
             case 7:
                 return this.lexema + " - PALAVRA_RESERVADA";
+            case 8:
+                return this.lexema + " - SALTADOR";
+            case 9:
+                return this.lexema + " - CATEGORIZADOR";
+            case 10:
+                return this.lexema + " - OPERADOR_ATRIBUICAO";
             case 99:
                 return this.lexema + " - FIM_CODIGO";    
         }
         return "";
     }
-    
+    //    public static int TIPO_SALTADOR = 8;
+    //public static int TIPO_CATEGORIZADOR = 9;
+    //public static int TIPO_OPERADOR_ATRIBUICAO = 10;
     
 }
