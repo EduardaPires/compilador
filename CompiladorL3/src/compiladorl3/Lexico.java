@@ -42,8 +42,6 @@ public class Lexico {
     private boolean hasNextChar(){
         return indiceConteudo < this.conteudo.length;
     }
-    
-
 
     //Retrocede o índice que aponta para o "char da vez" em uma unidade
     private void back(){
@@ -174,7 +172,6 @@ public class Lexico {
                 case 5:
                     this.back();
                     return new Token(lexema.toString(), Token.TIPO_CARACTER_ESPECIAL); 
-                    //break;
                 case 6:
                     if(this.isDigito(c) || this.isLetra(c)){
                         lexema.append(c);
@@ -198,22 +195,18 @@ public class Lexico {
                 case 8:
                     if (c == '=') {
                         lexema.append(c);
-                        //this.back();
                         return new Token(lexema.toString(), Token.TIPO_OPERADOR_RELACIONAL); 
                     }
                     else {
                         this.back();
                         return new Token(lexema.toString(), Token.TIPO_OPERADOR_RELACIONAL); 
                     }
-                    //break;
                 case 9:
                     this.back();
                     return new Token(lexema.toString(), Token.TIPO_PALAVRA_RESERVADA); 
-                    //break;
                 case 10:
                     this.back();
                     return new Token(lexema.toString(), Token.TIPO_OPERADOR_ARITMETICO); 
-                    //break;
                 case 11:
                     this.back();
                     return new Token(lexema.toString(), Token.TIPO_CHAR);
@@ -247,7 +240,6 @@ public class Lexico {
                     return new Token(lexema.toString(), Token.TIPO_CATEGORIZADOR);
                 case 99:
                     return new Token(lexema.toString(), Token.TIPO_FIM_CODIGO); 
-                    //break;
             }
         }                
         return token;
