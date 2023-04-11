@@ -74,10 +74,6 @@ public class Lexico {
                     if(c == ' ' || c == '\t' || c == '\n' || c == '\r' ){ //caracteres de espaço em branco ASCII tradicionais 
                         estado = 0;
                     }
-                    else if (lexema.toString().compareTo("int")==0 || lexema.toString().compareTo("float")==0 || lexema.toString().compareTo("if")==0 || lexema.toString().compareTo("else")==0 || lexema.toString().compareTo("main")==0 || lexema.toString().compareTo("char")==0) {
-                        lexema.append(c);
-                        estado = 9;
-                    }
                     else if(this.isLetra(c) || c == '_'){ //id
                         lexema.append(c);
                         estado = 1;
@@ -121,7 +117,13 @@ public class Lexico {
                         estado = 1;                        
                     }else{
                         this.back();
-                        return new Token(lexema.toString(), Token.TIPO_IDENTIFICADOR);                        
+                        String lex = lexema.toString();
+                        if (lex.compareTo("int")==0 || lex.compareTo("float")==0 || lex.compareTo("if")==0 || lex.compareTo("else")==0 || lex.compareTo("main")==0 ||lex.compareTo("char")==0) {
+                            estado = 9;
+                        }
+                        else {
+                            return new Token(lexema.toString(), Token.TIPO_IDENTIFICADOR);   
+                        }                     
                     }
                     break;
                 case 2:
