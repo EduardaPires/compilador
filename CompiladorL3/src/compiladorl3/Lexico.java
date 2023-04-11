@@ -106,6 +106,10 @@ public class Lexico {
                         lexema.append(c);
                         estado = 10;
                     }
+                    else if (c=='#'){
+                        lexema.append(c);
+                        estado = 1;
+                    }
                     else{
                         lexema.append(c);
                         throw new RuntimeException("Erro: token inválido \"" + lexema.toString() + "\"");
@@ -120,6 +124,15 @@ public class Lexico {
                         String lex = lexema.toString();
                         if (lex.compareTo("int")==0 || lex.compareTo("float")==0 || lex.compareTo("if")==0 || lex.compareTo("else")==0 || lex.compareTo("main")==0 ||lex.compareTo("char")==0) {
                             estado = 9;
+                        }
+                        else if (lex.compareTo("tunnel")==0) {
+                            estado = 14;
+                        }
+                        else if (lex.compareTo("tunnel:begin")==0 || lex.compareTo("tunnel:end")==0) {
+                            estado = 15;
+                        }
+                        else if (lex.charAt(0)=='#') {
+                            estado = 16;
                         }
                         else {
                             return new Token(lexema.toString(), Token.TIPO_IDENTIFICADOR);   
@@ -185,7 +198,7 @@ public class Lexico {
                 case 8:
                     if (c == '=') {
                         lexema.append(c);
-                        this.back();
+                        //this.back();
                         return new Token(lexema.toString(), Token.TIPO_OPERADOR_RELACIONAL); 
                     }
                     else {
@@ -214,8 +227,24 @@ public class Lexico {
                         return new Token(lexema.toString(), Token.TIPO_OPERADOR_ATRIBUICAO);
                     }
                 case 13:
-                    this.back();
+                    //this.back(); tirou para n analisar um == duas vezes, e classificar tbm como atribuição
                     return new Token(lexema.toString(), Token.TIPO_OPERADOR_RELACIONAL);
+                case 14:
+                    if (c == ':'){
+                        lexema.append(c);
+                        estado=1;
+                    }
+                    else {
+                        lexema.append(c);
+                        throw new RuntimeException("Erro: tunelamento falhou \"" + lexema.toString() + "\"");
+                    }
+                    break;
+                case 15:
+                    this.back();
+                    return new Token(lexema.toString(), Token.TIPO_SALTADOR);
+                case 16:
+                    this.back();
+                    return new Token(lexema.toString(), Token.TIPO_CATEGORIZADOR);
                 case 99:
                     return new Token(lexema.toString(), Token.TIPO_FIM_CODIGO); 
                     //break;
