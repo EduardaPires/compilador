@@ -195,7 +195,7 @@ public class Lexico {
                 case 8:
                     if (c == '=') {
                         lexema.append(c);
-                        return new Token(lexema.toString(), Token.TIPO_OPERADOR_RELACIONAL); 
+                        estado=17;
                     }
                     else {
                         this.back();
@@ -238,6 +238,9 @@ public class Lexico {
                 case 16:
                     this.back();
                     return new Token(lexema.toString(), Token.TIPO_CATEGORIZADOR);
+                case 17:
+                    this.back();
+                    return new Token(lexema.toString(), Token.TIPO_OPERADOR_RELACIONAL); 
                 case 99:
                     return new Token(lexema.toString(), Token.TIPO_FIM_CODIGO); 
             }
