@@ -162,7 +162,7 @@ public class Lexico {
                 case 4:
                     if(this.isDigito(c)){
                         lexema.append(c);
-                        estado = 7;
+                        estado = 4;
                     }
                     else {
                         this.back();
