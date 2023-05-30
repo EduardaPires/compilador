@@ -7,7 +7,7 @@ package compiladorl3;
 
 /**
  *
- * @author tarci
+ * @author rod e duds
  */
 public class Util {
     

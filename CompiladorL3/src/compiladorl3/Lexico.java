@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author tarci
+ * @author rod e duds
  */
 public class Lexico {
     private char[] conteudo;
