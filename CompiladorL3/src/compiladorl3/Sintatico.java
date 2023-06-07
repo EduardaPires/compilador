@@ -23,19 +23,24 @@ public class Sintatico {
         if(!token.getLexema().equals("main")){
             throw new RuntimeException("Oxe, cadê main?");
         }
-        
+
+        // n entrou pq tem token main, pega próximo.
         this.token = this.lexico.nextToken();
         if(!token.getLexema().equals("(")){
             throw new RuntimeException("Abre o parêntese do main cabra!");
         }
-        
+        // n entrou pq tem token "(", pega o próximo.
+
         this.token = this.lexico.nextToken();
         if(!token.getLexema().equals(")")){
             throw new RuntimeException("Fechar o parêntese do main cabra!");
-        }        
+        }
+        // n entrou pq tem token ")", pega o próximo.
         this.token = this.lexico.nextToken();
         
-        this.B();
+        this.B(); // chama o B (entra no B)
+        
+        // só continua para esse if se as chamadas das funções seguintes não der erro algum.
         if(this.token.getTipo() == Token.TIPO_FIM_CODIGO){
             System.out.println("O Código tá massa! Arretado! Tu botou pra torar!");        
         }else{
