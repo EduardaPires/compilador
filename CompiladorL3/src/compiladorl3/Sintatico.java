@@ -20,47 +20,60 @@ public class Sintatico {
     
     public void S(){//S determina estado inicial
         this.token = this.lexico.nextToken();
+        if(!token.getLexema().equals(":(")){
+            throw new RuntimeException("Falta o primeiro termo da função principal ':(')");
+        }
+        this.token = this.lexico.nextToken();
+
         if(!token.getLexema().equals("main")){
-            throw new RuntimeException("Oxe, cadê main?");
+            throw new RuntimeException("Falta o segundo termo da função principal 'main' ");
         }
 
         // n entrou pq tem token main, pega próximo.
         this.token = this.lexico.nextToken();
         if(!token.getLexema().equals("(")){
-            throw new RuntimeException("Abre o parêntese do main cabra!");
+            throw new RuntimeException("faltou abrir o parênteses da main!");
         }
         // n entrou pq tem token "(", pega o próximo.
 
         this.token = this.lexico.nextToken();
         if(!token.getLexema().equals(")")){
-            throw new RuntimeException("Fechar o parêntese do main cabra!");
+            throw new RuntimeException("faltou fechar o parênteses da main!");
         }
         // n entrou pq tem token ")", pega o próximo.
         this.token = this.lexico.nextToken();
         
         this.B(); // chama o B (entra no B)
-        
+
         // só continua para esse if se as chamadas das funções seguintes não der erro algum.
         if(this.token.getTipo() == Token.TIPO_FIM_CODIGO){
-            System.out.println("O Código tá massa! Arretado! Tu botou pra torar!");        
+            System.out.println("Tudo certo com seu código!");        
         }else{
-            throw new RuntimeException("Oxe, eu deu bronca preto do fim do programa.");
+            throw new RuntimeException("Algum erro ocorreu.");
+            // teste
         }
     }
     
     private void B(){
-        if(!this.token.getLexema().equals("{")){
+        if(!this.token.getLexema().equals("{")){  // verifica se abriu o "{ da main"
             throw new RuntimeException("Oxe, tave esperando um \"{\" pertinho de " + this.token.getLexema());
         }
-        this.token = this.lexico.nextToken();
-        this.CS();
-        if(!this.token.getLexema().equals("}")){
+        this.token = this.lexico.nextToken();  // pega próximo token.
+        this.CS();  // chama a função de CS
+        /*Ao chegar aqui nosso código está assim:
+         * main(){
+         * aqui ele vai entrar na funcao CS
+         * 
+         */
+
+         // Esse if só será executado se não houver nenhum erro em CS e nas suas chamadas seguintes.
+        if(!this.token.getLexema().equals("}")){  // verifica se fechou o "}" da main
             throw new RuntimeException("Oxe, tava esperando um \"}\" pertinho de " + this.token.getLexema());
         }        
         this.token = this.lexico.nextToken();        
     }
     
-    private void CS(){
+    private void CS(){  //
         if((this.token.getTipo() == Token.TIPO_IDENTIFICADOR) ||
             this.token.getLexema().equals("int") ||
             this.token.getLexema().equals("float")){
