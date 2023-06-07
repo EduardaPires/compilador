@@ -111,15 +111,28 @@ public class Sintatico {
         if(getTokenLex().equals("=")){
             tiposAtribuicao();
         }else{
-            throw new RuntimeException("Nome de variável inválida");
+            throw new RuntimeException("A atribuição deve ser feita com '='' !");
         }
     }
 
     private void condicional(){
-
+        
     }
 
     private void loopWhile(){
+        
+    }
+
+    private void tiposAtribuicao(){
+        if(this.token.getTipo() == Token.TIPO_IDENTIFICADOR){
+            this.token = this.lexico.nextToken();
+            reservadaOuIdentificador();  // volta para primeira função do main
+        }else if(this.token.getTipo() == Token.TIPO_REAL){
+            verificarOperadores();
+        }
+    }
+
+    private void verificarOperadores(){
         
     }
     
