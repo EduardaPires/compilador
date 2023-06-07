@@ -80,10 +80,15 @@ public class Sintatico {
         }
         else if(this.token.getTipo() == Token.TIPO_IDENTIFICADOR){
             this.ATRIBUICAO();
-        }else{
+        }
+        else if(this.token.getTipo() == Token.TIPO_FIM_CODIGO){
+            return;
+        }
+        else{
             throw new RuntimeException("Essa palavra não é válida dentro da main");
         }      
     }
+
     
     private void reservada(){
         if(lexEquals("int") || lexEquals("float") || lexEquals("double")){  // se for igual a tipo identificador, é pq faremos atribuição
@@ -140,9 +145,15 @@ public class Sintatico {
     private void verificarOperadores(){
         this.token = this.lexico.nextToken();
 
+        if(this.token.getTipo() == Token.TIPO_FIM_CODIGO){
+            return;
+        }
+
         if(getTokenLex().equals("+") || getTokenLex().equals("-")
          || getTokenLex().equals("*") || getTokenLex().equals("/")){
             tiposAtribuicao();
+        }else{
+            throw new RuntimeException("Há um valor inválido na atribuição!");
         }
 
     }
@@ -188,12 +199,5 @@ public class Sintatico {
 
     private String getTokenLex(){
         return this.token.getLexema();
-    }
-
-
-
-    
-    
-    
-    
+    } 
 }
