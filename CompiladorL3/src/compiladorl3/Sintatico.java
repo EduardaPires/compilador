@@ -109,14 +109,18 @@ public class Sintatico {
         this.token = this.lexico.nextToken();
 
         if(getTokenLex().equals("=")){
-            
+            tiposAtribuicao();
         }else{
             throw new RuntimeException("Nome de variável inválida");
         }
+    }
 
+    private void condicional(){
 
+    }
+
+    private void loopWhile(){
         
-
     }
     
     private void E(){
