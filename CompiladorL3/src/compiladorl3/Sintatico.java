@@ -60,7 +60,7 @@ public class Sintatico {
         }
         this.token = this.lexico.nextToken();  // pega próximo token.
 
-        this.reservadaOuIdentificador();;  
+        this.reservadaOuIdentificador();  
         /*Ao chegar aqui nosso código está assim:
          * main(){
          * aqui ele vai entrar na funcao CS
@@ -70,17 +70,19 @@ public class Sintatico {
          // Esse if só será executado se não houver nenhum erro em CS e nas suas chamadas seguintes.
         if(!lexEquals("}")){  // verifica se fechou o "}" da main
             throw new RuntimeException("Você precisa fechar o bloco da main com '}'");
-        }        
-        this.token = this.lexico.nextToken();        
+        }         
     }
     
-    private void reservadaOuIdentificador(){  //
+    private void reservadaOuIdentificador(){
+
         if((this.token.getTipo() == Token.TIPO_PALAVRA_RESERVADA )){
             this.reservada();
         }
         else if(this.token.getTipo() == Token.TIPO_IDENTIFICADOR){
             this.ATRIBUICAO();
-        }       
+        }else{
+            throw new RuntimeException("Essa palavra não é válida dentro da main");
+        }      
     }
     
     private void reservada(){
@@ -124,16 +126,25 @@ public class Sintatico {
     }
 
     private void tiposAtribuicao(){
+        this.token = this.lexico.nextToken();
         if(this.token.getTipo() == Token.TIPO_IDENTIFICADOR){
             this.token = this.lexico.nextToken();
             reservadaOuIdentificador();  // volta para primeira função do main
         }else if(this.token.getTipo() == Token.TIPO_REAL){
             verificarOperadores();
+        }else{
+            throw new RuntimeException("Há um valor inválido na atribuição!");
         }
     }
 
     private void verificarOperadores(){
-        
+        this.token = this.lexico.nextToken();
+
+        if(getTokenLex().equals("+") || getTokenLex().equals("-")
+         || getTokenLex().equals("*") || getTokenLex().equals("/")){
+            tiposAtribuicao();
+        }
+
     }
     
     private void E(){
