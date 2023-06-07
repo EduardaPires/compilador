@@ -18,7 +18,7 @@ public class Sintatico {
         this.lexico = lexico;
     }
     
-    public void S(){//S determina estado inicial
+    public void mainDeclaration(){//S determina estado inicial
         this.token = this.lexico.nextToken();
         if(!token.getLexema().equals(":(")){
             throw new RuntimeException("Falta o primeiro termo da função principal ':(')");
@@ -43,7 +43,7 @@ public class Sintatico {
         // n entrou pq tem token ")", pega o próximo.
         this.token = this.lexico.nextToken();
         
-        this.B(); // chama o B (entra no B)
+        this.insideMain(); // chama o B (entra no B)
 
         // só continua para esse if se as chamadas das funções seguintes não der erro algum.
         if(this.token.getTipo() == Token.TIPO_FIM_CODIGO){
@@ -54,11 +54,12 @@ public class Sintatico {
         }
     }
     
-    private void B(){
+    private void insideMain(){ // 
         if(!this.token.getLexema().equals("{")){  // verifica se abriu o "{ da main"
             throw new RuntimeException("Oxe, tave esperando um \"{\" pertinho de " + this.token.getLexema());
         }
         this.token = this.lexico.nextToken();  // pega próximo token.
+
         this.CS();  // chama a função de CS
         /*Ao chegar aqui nosso código está assim:
          * main(){
