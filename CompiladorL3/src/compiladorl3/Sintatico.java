@@ -60,7 +60,7 @@ public class Sintatico {
         }
         this.token = this.lexico.nextToken();  // pega próximo token.
 
-        this.CS();  
+        this.reservadaOuIdentificador();;  
         /*Ao chegar aqui nosso código está assim:
          * main(){
          * aqui ele vai entrar na funcao CS
@@ -74,27 +74,26 @@ public class Sintatico {
         this.token = this.lexico.nextToken();        
     }
     
-    private void CS(){  //
-        if((this.token.getTipo() == Token.TIPO_IDENTIFICADOR)){
-            this.C();
-            this.CS();
-        }else{
+    private void reservadaOuIdentificador(){  //
+        if((this.token.getTipo() == Token.TIPO_PALAVRA_RESERVADA )){
+            this.reservada();
+            
+        }else if(this.token.getTipo() == Token.TIPO_IDENTIFICADOR){
             throw new RuntimeException("Nada foi declarado!");
         }       
     }
     
-    private void C(){
-        if(this.token.getTipo() == Token.TIPO_IDENTIFICADOR){  // se for igual a tipo identificador, é pq faremos atribuição
-            this.ATRIBUICAO();            
-        }else if(this.token.getLexema().equals("int") || this.token.getLexema().equals("float")){
-            this.DECLARACAO(); 
-        }else{
-            throw new RuntimeException("Oxe, eu tava esperando tu "
-                    + "declarar um comando pertinho de :" + this.token.getLexema());
+    private void reservada(){
+        if(lexEquals("int") || lexEquals("float") || lexEquals("double")){  // se for igual a tipo identificador, é pq faremos atribuição
+            this.declararVar();            
+        }else if(lexEquals("if") || lexEquals("else")){
+            this.condicional(); 
+        }else if(lexEquals("while")){
+            this.loopWhile();
         }
     }
         
-    private void DECLARACAO(){
+    private void declararVar(){
         if(!(this.token.getLexema().equals("int") ||
                 this.token.getLexema().equals("float"))){
             throw new RuntimeException("Tu vacilou na delcaração de variável. "
@@ -167,6 +166,10 @@ public class Sintatico {
     private Boolean lexEquals(String str){
         return this.token.getLexema().equals(str);
     }
+
+
+
+    
     
     
     

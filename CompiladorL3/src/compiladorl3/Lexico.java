@@ -120,7 +120,9 @@ public class Lexico {
                     }else{
                         this.back();
                         String lex = lexema.toString();
-                        if (lex.compareTo("int")==0 || lex.compareTo("float")==0 || lex.compareTo("if")==0 || lex.compareTo("else")==0 || lex.compareTo("main")==0 ||lex.compareTo("char")==0) {
+                        if (lex.compareTo("int")==0 || lex.compareTo("float")==0 || lex.compareTo("if")==0 || 
+                        lex.compareTo("else")==0 || lex.compareTo("main")==0 ||lex.compareTo("char")==0 ||
+                         lex.compareTo("while") == 0 || lex.compareTo("double") == 0 ) {
                             estado = 9;
                         }
                         else if (lex.compareTo("tunnel")==0) {
