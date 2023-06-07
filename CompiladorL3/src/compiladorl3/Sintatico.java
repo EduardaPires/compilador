@@ -56,7 +56,7 @@ public class Sintatico {
     
     private void insideMain(){ // 
         if(!this.token.getLexema().equals("{")){  // verifica se abriu o "{ da main"
-            throw new RuntimeException("Oxe, tave esperando um \"{\" pertinho de " + this.token.getLexema());
+            throw new RuntimeException("Você precisa abrir o bloco da main com '{'");
         }
         this.token = this.lexico.nextToken();  // pega próximo token.
 
@@ -69,7 +69,7 @@ public class Sintatico {
 
          // Esse if só será executado se não houver nenhum erro em CS e nas suas chamadas seguintes.
         if(!this.token.getLexema().equals("}")){  // verifica se fechou o "}" da main
-            throw new RuntimeException("Oxe, tava esperando um \"}\" pertinho de " + this.token.getLexema());
+            throw new RuntimeException("Você precisa fechar o bloco da main com '}'");
         }        
         this.token = this.lexico.nextToken();        
     }
