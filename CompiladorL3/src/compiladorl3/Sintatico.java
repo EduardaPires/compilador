@@ -77,9 +77,9 @@ public class Sintatico {
     private void reservadaOuIdentificador(){  //
         if((this.token.getTipo() == Token.TIPO_PALAVRA_RESERVADA )){
             this.reservada();
-            
-        }else if(this.token.getTipo() == Token.TIPO_IDENTIFICADOR){
-            throw new RuntimeException("Nada foi declarado!");
+        }
+        else if(this.token.getTipo() == Token.TIPO_IDENTIFICADOR){
+            this.ATRIBUICAO();
         }       
     }
     
@@ -90,42 +90,33 @@ public class Sintatico {
             this.condicional(); 
         }else if(lexEquals("while")){
             this.loopWhile();
+        }else{
+            throw new RuntimeException("o que misera tu botou ai bixo");
         }
     }
         
     private void declararVar(){
-        if(!(this.token.getLexema().equals("int") ||
-                this.token.getLexema().equals("float"))){
-            throw new RuntimeException("Tu vacilou na delcaração de variável. "
-                    + "Pertinho de: " + this.token.getLexema());
-        }
         this.token = this.lexico.nextToken();
         if(this.token.getTipo() != Token.TIPO_IDENTIFICADOR){
-            throw new RuntimeException("Tu vacilou na delcaração de variável. "
-                    + "Pertinho de: " + this.token.getLexema());
+            throw new RuntimeException("Nome de variável inválida");
+        }else{
+            this.token = this.lexico.nextToken();
+            reservadaOuIdentificador();
         }
-        this.token = this.lexico.nextToken();
-        if(!this.token.getLexema().equalsIgnoreCase(";")){
-            throw new RuntimeException("Tu vacilou  na delcaração de variável. "
-                    + "Pertinho de: " + this.token.getLexema());
-        }
-        this.token = this.lexico.nextToken();        
     }
     
     private void ATRIBUICAO(){
-        if(this.token.getTipo() != Token.TIPO_IDENTIFICADOR){
-            throw new RuntimeException("Erro na atribuição. Pertinho de: " + this.token.getLexema());
-        }
         this.token = this.lexico.nextToken();
-        if(this.token.getTipo() != Token.TIPO_OPERADOR_ATRIBUICAO){
-            throw new RuntimeException("Erro na atribuição. Pertinho de: " + this.token.getLexema());
+
+        if(getTokenLex().equals("=")){
+            
+        }else{
+            throw new RuntimeException("Nome de variável inválida");
         }
-        this.token = this.lexico.nextToken();
-        this.E();
-        if(!this.token.getLexema().equals(";")){
-            throw new RuntimeException("Erro na atribuição. Pertinho de: " + this.token.getLexema());
-        }
-        this.token = this.lexico.nextToken();                
+
+
+        
+
     }
     
     private void E(){
@@ -165,6 +156,10 @@ public class Sintatico {
 
     private Boolean lexEquals(String str){
         return this.token.getLexema().equals(str);
+    }
+
+    private String getTokenLex(){
+        return this.token.getLexema();
     }
 
 
