@@ -2,5 +2,15 @@
 main(){
     int a;
     int b;
-    int a;
+    a = 10 + 5 + 7;
+    b = a;
+    if (a==b){
+        while (a==b){
+            a = b + 1;
+        }
+    }
+    else {
+        b = a+1;
+    }
+    
  } $

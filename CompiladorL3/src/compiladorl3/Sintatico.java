@@ -21,19 +21,19 @@ public class Sintatico {
         this.token = this.lexico.nextToken();
 
         if (!lexEquals("main")) {
-            throw new RuntimeException("Falta o primeiro termo da função principal 'main' ");
+            throw new RuntimeException("Falta o primeiro termo da função principal 'main' :(");
         }
 
         // n entrou pq tem token main, pega próximo.
         this.token = this.lexico.nextToken();
         if (!lexEquals("(")) {
-            throw new RuntimeException("faltou abrir o parênteses da main!");
+            throw new RuntimeException("faltou abrir o parênteses da main! :(");
         }
         // n entrou pq tem token "(", pega o próximo.
 
         this.token = this.lexico.nextToken();
         if (!lexEquals(")")) {
-            throw new RuntimeException("faltou fechar o parênteses da main!");
+            throw new RuntimeException("faltou fechar o parênteses da main! :(");
         }
         // n entrou pq tem token ")", pega o próximo.
         this.token = this.lexico.nextToken();
@@ -44,7 +44,7 @@ public class Sintatico {
     //fazer linguagem livre de contexto
     private void insideMainBlock() { //verifica se abriu, passa pro proximo bloco e quando voltar dele verifica dse a chave fecha
         if (!lexEquals("{")) { // verifica se abriu o "{ da main"
-            throw new RuntimeException("Você precisa abrir o bloco da main com '{'");
+            throw new RuntimeException("Você precisa abrir o bloco da main com '{' :(");
         }
         this.token = this.lexico.nextToken(); // pega próximo token.
         this.declararVar();
@@ -52,11 +52,11 @@ public class Sintatico {
         this.comando();
         
         if(lexEquals("}")){
-            System.out.println("Código rodou bem!");
+            System.out.println("A dor foi compilada, agora só nos resta alegria!!! :D");
             return;  // corrigido problema de fechamento da main (Digs).
         }
         else {
-            throw new RuntimeException("Você precisa fechar o bloco da main com '}'");
+            throw new RuntimeException("Você precisa fechar o bloco da main com '}' :(");
         }// entra em função para ver se é reservada ou identificador.
         
     }
@@ -66,10 +66,10 @@ public class Sintatico {
         if (lexEquals("int") || lexEquals("float")|| lexEquals("char")) {
             this.token = this.lexico.nextToken();
             if (this.token.getTipo() != Token.TIPO_IDENTIFICADOR) {
-                throw new RuntimeException("Nome de variável inválida");
+                throw new RuntimeException("Nome de variável inválida :(");
             } else {
                 if (idList.contains(getTokenLex())) {
-                    throw new RuntimeException("Já existe uma variável chamada '" + getTokenLex() + "'");
+                    throw new RuntimeException("Já existe uma variável chamada '" + getTokenLex() + "' :(");
                 }
                 idList.add(token.getLexema());
                 this.token = this.lexico.nextToken();
@@ -79,7 +79,7 @@ public class Sintatico {
                 this.token = this.lexico.nextToken();
                 this.operacoes();
                 if (!getTokenLex().equals(";")){
-                    throw new RuntimeException("Tem que finalizar com ;");
+                    throw new RuntimeException("Tem que finalizar com ; :(");
                 }
              } 
      
@@ -87,7 +87,7 @@ public class Sintatico {
             if(getTokenLex().equals(";")){
                 this.token = this.lexico.nextToken();
             }else{
-                throw new RuntimeException("Bote o ponto e vírgula, meu nobre");
+                throw new RuntimeException("Bote o ponto e vírgula, meu nobre :(");
             }
         }
 
@@ -111,7 +111,7 @@ public class Sintatico {
         
         if (this.token.getTipo() == Token.TIPO_IDENTIFICADOR) {
             if (!idList.contains(getTokenLex())) {
-                throw new RuntimeException("Essa variável ainda não foi declarada: '" + getTokenLex() + "'");
+                throw new RuntimeException("Essa variável ainda não foi declarada: '" + getTokenLex() + "' :(");
             }
             this.ATRIBUICAO();
             this.token = this.lexico.nextToken();
@@ -129,20 +129,20 @@ public class Sintatico {
         
         this.token = this.lexico.nextToken();
         if (!lexEquals("(")) {
-            throw new RuntimeException("Falta abrir parênteses na estrutura condicional.");
+            throw new RuntimeException("Falta abrir parênteses na estrutura condicional. :(");
         }
 
         this.token = this.lexico.nextToken();
         this.analisarExpressao();
 
         if (!lexEquals(")")) {
-            throw new RuntimeException("Falta fechar parênteses na estrutura condicional.");
+            throw new RuntimeException("Falta fechar parênteses na estrutura condicional. :(");
         }
 
         this.token = this.lexico.nextToken();
 
         if(!lexEquals("{")){
-            throw new RuntimeException("Abra as chaves do if!");
+            throw new RuntimeException("Abra as chaves para começar o comando! :(");
         }
 
         this.token = this.lexico.nextToken();
@@ -151,7 +151,7 @@ public class Sintatico {
         this.comando();
 
         if(!lexEquals("}")){
-            throw new RuntimeException("Feche as chaves do if!");
+            throw new RuntimeException("Feche as chaves para finalizar o comando! :(");
         }
     }
 
@@ -164,7 +164,7 @@ public class Sintatico {
             this.token = this.lexico.nextToken();
             //this.token = this.lexico.nextToken();
             if(!lexEquals("{")){
-                throw new RuntimeException("Abra as chaves!");
+                throw new RuntimeException("Abre as chaves, poxa! :(");
             }
     
             this.token = this.lexico.nextToken();
@@ -173,7 +173,7 @@ public class Sintatico {
             this.comando();
     
             if(!lexEquals("}")){
-                throw new RuntimeException("Feche as chaves!");
+                throw new RuntimeException("Fecha as chaves, poxa! :(");
             }
         }
     }
@@ -185,12 +185,12 @@ public class Sintatico {
         if (getTokenLex().equals("=")) {
            this.token = this.lexico.nextToken();
         } else {
-            throw new RuntimeException("A atribuição deve ser feita com '='' !");
+            throw new RuntimeException("A atribuição deve ser feita com '='' ! :(");
         }
 
         this.operacoes();
         if (!getTokenLex().equals(";")){
-            throw new RuntimeException("Tem que finalizar com ;");
+            throw new RuntimeException("Tem que finalizar com ; :(");
         }
     }
 
@@ -198,14 +198,12 @@ public class Sintatico {
         if (this.token.getTipo() == Token.TIPO_IDENTIFICADOR || this.token.getTipo() == Token.TIPO_REAL || this.token.getTipo() == Token.TIPO_INTEIRO ){
             this.token = this.lexico.nextToken();
         } else {
-            throw new RuntimeException("O valor atribuido é invalido");
+            throw new RuntimeException("O valor atribuido é invalido :(");
         }
 
         if (this.token.getTipo() == Token.TIPO_OPERADOR_ARITMETICO){
             this.token = this.lexico.nextToken();
             this.operacoes();
-        }else{
-            throw new RuntimeException("Coloque um operador aritmético!!");
         }
 
 
@@ -215,13 +213,13 @@ public class Sintatico {
         if((this.token.getTipo() == Token.TIPO_IDENTIFICADOR)) {
             this.token = this.lexico.nextToken();
         } else {
-            throw new RuntimeException("Era esperado um identificador");
+            throw new RuntimeException("Era esperado um identificador :(");
         }
 
         if ((this.token.getTipo() == Token.TIPO_OPERADOR_RELACIONAL)) {
             this.token = this.lexico.nextToken();
         }else{
-            throw new RuntimeException("Era esperado operador relacional");
+            throw new RuntimeException("Era esperado operador relacional :(");
         }
 
         if (this.token.getTipo() == Token.TIPO_IDENTIFICADOR || this.token.getTipo() == Token.TIPO_CHAR || this.token.getTipo() == Token.TIPO_REAL || this.token.getTipo() == Token.TIPO_INTEIRO) {
