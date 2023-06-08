@@ -18,14 +18,18 @@ public class Sintatico {
         this.lexico = lexico;
     }
 
+    :(main(){
+
+
+    
     public void mainDeclaration() {// S determina estado inicial
         this.token = this.lexico.nextToken();
         if (!lexEquals(":(")) {
-            throw new RuntimeException("Falta o primeiro termo da função principal ':(')");
+            throw new RuntimeException("Falta o primeiro termo da função principal ':('");
         }
         this.token = this.lexico.nextToken();
 
-        if (!lexEquals(":main")) {
+        if (!lexEquals("main")) {
             throw new RuntimeException("Falta o segundo termo da função principal 'main' ");
         }
 
@@ -90,8 +94,7 @@ public class Sintatico {
     }
 
     private void reservada() {
-        if (lexEquals("int") || lexEquals("float") || lexEquals("double")) { // se for igual a tipo identificador, é pq
-                                                                             // faremos atribuição
+        if (lexEquals("int") || lexEquals("float") || lexEquals("double")) { // se for igual a tipo identificador, é pq                                                              // faremos atribuição
             this.declararVar();
         } else if (lexEquals("if") || lexEquals("else")) {
             this.condicional();
