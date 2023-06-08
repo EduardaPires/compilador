@@ -93,7 +93,7 @@ public class Sintatico {
             if (lexEquals("if")) {
                 //this.comandos --> ve se é if ou while e a partir disso leva pra func dif
                 this.expressao();
-                this.token = this.lexico.nextToken(); 
+                //this.token = this.lexico.nextToken(); 
                 this.comando();
             }
             
@@ -106,8 +106,8 @@ public class Sintatico {
             this.ATRIBUICAO();
             this.token = this.lexico.nextToken();
             this.comando();
-        }else if(this.getTokenLex().equals("=")){
-            
+        }else{
+            this.declararVar();
         }
         //volta para o bloco main
     }
@@ -145,9 +145,10 @@ public class Sintatico {
     private void expressao(){
 
         this.bloco();
-        //this.token = this.lexico.nextToken();
+
+        this.token = this.lexico.nextToken();
         
-        if(this.lexico.nextToken().getLexema().equals("else")){
+        if(this.token.getLexema().equals("else")){
             this.token = this.lexico.nextToken();
             //this.token = this.lexico.nextToken();
             if(!lexEquals("{")){
@@ -204,14 +205,34 @@ public class Sintatico {
         this.token = this.lexico.nextToken();
 
         if (getTokenLex().equals("=")) {
-           this.comando();
+           this.token = this.lexico.nextToken();
         } else {
             throw new RuntimeException("A atribuição deve ser feita com '='' !");
         }
+
+        this.operacoes();
+        if (!getTokenLex().equals(";")){
+            throw new RuntimeException("Tem que finalizar com ;");
+        }
+    }
+
+    private void operacoes(){
+        if (this.token.getTipo() == Token.TIPO_IDENTIFICADOR || this.token.getTipo() == Token.TIPO_REAL || this.token.getTipo() == Token.TIPO_INTEIRO ){
+            this.token = this.lexico.nextToken();
+        } else {
+            throw new RuntimeException("O valor atribuido é invalido");
+        }
+
+        if (this.token.getTipo() == Token.TIPO_OPERADOR_ARITMETICO){
+            this.token = this.lexico.nextToken();
+            this.operacoes();
+        }
+
+
     }
 
     private void analisarExpressao(){
-        if ((this.token.getTipo() == Token.TIPO_IDENTIFICADOR)) {
+        if((this.token.getTipo() == Token.TIPO_IDENTIFICADOR)) {
             this.token = this.lexico.nextToken();
         } else {
             throw new RuntimeException("Era esperado um identificador");
