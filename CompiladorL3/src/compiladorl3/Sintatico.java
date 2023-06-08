@@ -40,11 +40,11 @@ public class Sintatico {
         this.insideMainBlock(); // chama o B (entra no B)
     }
 
-    private void end(){
-        if (this.token.getTipo() == Token.TIPO_FIM_CODIGO) {
-            System.out.println("Tudo certo com seu código!");
-        }
-    }
+    // private void end(){
+    //     if (this.token.getTipo() == Token.TIPO_FIM_CODIGO) {
+    //         System.out.println("Tudo certo com seu código!");
+    //     }
+    // }
 
     //fazer linguagem livre de contexto
     private void insideMainBlock() { //verifica se abriu, passa pro proximo bloco e quando voltar dele verifica dse a chave fecha
@@ -56,9 +56,9 @@ public class Sintatico {
         //this.reservadaOuIdentificador(); 
         this.comando();
         
-        if(lexEquals("}")){
-            this.token = this.lexico.nextToken();
-            end();
+        if(!lexEquals("}")){
+            System.out.println("Código rodou bem!");
+            return;  // corrigido problema de fechamento da main (Digs).
         }
         else {
             throw new RuntimeException("Você precisa fechar o bloco da main com '}'");
