@@ -84,8 +84,16 @@ public class Sintatico {
             }
 
             if((this.token.getTipo() == Token.TIPO_REAL) ||
-             this.token.getTipo() == Token.TIPO_IDENTIFICADOR ){
-                
+             this.token.getTipo() == Token.TIPO_IDENTIFICADOR || this.token.getTipo() == Token.TIPO_INTEIRO ){
+                this.token = this.lexico.nextToken();
+            }else{
+                throw new RuntimeException("Valor inválido para variável!");
+            }
+
+            if(getTokenLex().equals(";")){
+                this.token = this.lexico.nextToken();
+            }else{
+                throw new RuntimeException("Bote o ponto e vírgula, meu nobre");
             }
         }
 
