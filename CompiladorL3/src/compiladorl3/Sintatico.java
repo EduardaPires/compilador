@@ -116,41 +116,50 @@ public class Sintatico {
         if (!lexEquals("if")) {
             throw new RuntimeException("Palavra-chave 'if' esperada na estrutura condicional.");
         }
-
-        // Avança para o próximo token
         this.token = this.lexico.nextToken();
 
-        // Verifica se há um "(" após o "if"
         if (!lexEquals("(")) {
             throw new RuntimeException("Falta abrir parênteses na estrutura condicional.");
         }
 
-        // Avança para o próximo token
         this.token = this.lexico.nextToken();
 
-        // Chama a função para análise da expressão condicional
         this.analisarExpressao();
 
-        // Verifica se há um ")" após a expressão condicional
         if (!lexEquals(")")) {
             throw new RuntimeException("Falta fechar parênteses na estrutura condicional.");
         }
+
+        this.token = this.lexico.nextToken();
 
         if(!lexEquals("{")){
             throw new RuntimeException("Abra as chaves do if!");
         }
 
-        
+        this.token = this.lexico.nextToken();
+
         this.reservadaOuIdentificador();
 
-        //this.analisarBlocoCodigo();
+        if(!lexEquals("}")){
+            throw new RuntimeException("Feche as chaves do if!");
+        }
+        this.token = this.lexico.nextToken();
 
-        if (lexEquals("else")) {
+        if (!lexEquals("else")) {
+            return;
+        }
 
+        if(lexEquals("else")){
             this.token = this.lexico.nextToken();
+        }
 
-            // Chama a função para análise do bloco de código do "else"
-           // this.analisarBlocoCodigo();
+        if(!lexEquals("{")){
+            throw new RuntimeException("Abra as chaves do else!");
+        }
+        this.token = this.lexico.nextToken();
+        this.reservadaOuIdentificador();
+        if(!lexEquals("}")){
+            throw new RuntimeException("Feche as chaves do else!");
         }
     }
 
