@@ -18,13 +18,9 @@ public class Sintatico {
     
     public void mainDeclaration() {// S determina estado inicial
         this.token = this.lexico.nextToken();
-        if (!lexEquals(":(")) {
-            throw new RuntimeException("Falta o primeiro termo da função principal ':('");
-        }
-        this.token = this.lexico.nextToken();
 
         if (!lexEquals("main")) {
-            throw new RuntimeException("Falta o segundo termo da função principal 'main' ");
+            throw new RuntimeException("Falta o primeiro termo da função principal 'main' ");
         }
 
         // n entrou pq tem token main, pega próximo.

@@ -1,9 +1,4 @@
 
-tunnel:begin 
-tunnel:en
+main(){
 
-'a'
-#cat
-$
-
-cara de cu
+}
