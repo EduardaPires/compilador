@@ -49,23 +49,31 @@ public class Sintatico {
         }
     }
 
-    private void insideMainBlock() { //
+    private void end(){
+        if (this.token.getTipo() == Token.TIPO_FIM_CODIGO) {
+            System.out.println("Tudo certo com seu código!");
+        }
+    }
+
+    //fazer linguagem livre de contexto
+    private void insideMainBlock() { //verifica se abriu, passa pro proximo bloco e quando voltar dele verifica dse a chave fecha
         if (!lexEquals("{")) { // verifica se abriu o "{ da main"
             throw new RuntimeException("Você precisa abrir o bloco da main com '{'");
         }
         this.token = this.lexico.nextToken(); // pega próximo token.
 
-        this.reservadaOuIdentificador(); // entra em função para ver se é reservada ou identificador.
-        
-        if (!lexEquals("}")) { // verifica se fechou o "}" da main
-            throw new RuntimeException("Você precisa fechar o bloco da main com '}'");
+        if(lexEquals("}")){
+            this.token = this.lexico.nextToken();
+            end();
         }
+        else {
+            this.reservadaOuIdentificador(); 
+        }// entra em função para ver se é reservada ou identificador.
+        
     }
 
+    //comando basico ou iteração
     private void reservadaOuIdentificador() {
-        if(this.token.getTipo() == Token.TIPO_FIM_CODIGO){
-            return;
-        }
 
         if ((this.token.getTipo() == Token.TIPO_PALAVRA_RESERVADA)) {
             this.reservada();
@@ -187,11 +195,17 @@ public class Sintatico {
     
 
     private void tiposAtribuicao() {
+
+        if (lexEquals("}")) {
+            return;
+        }
         this.token = this.lexico.nextToken();
         if (this.token.getTipo() == Token.TIPO_IDENTIFICADOR) {
             verificarOperadores(); 
-        } else if (this.token.getTipo() == Token.TIPO_REAL) {
+        } else if (this.token.getTipo() == Token.TIPO_REAL || this.token.getTipo() == Token.TIPO_INTEIRO) {
             verificarOperadores();
+        } else if (this.token.getTipo() == Token.TIPO_FIM_CODIGO) {
+            return;
         } else {
             throw new RuntimeException("Há um valor inválido na atribuição!");
         }
@@ -200,10 +214,10 @@ public class Sintatico {
     private void verificarOperadores() {
         this.token = this.lexico.nextToken();
 
-        if (this.token.getTipo() == Token.TIPO_FIM_CODIGO) {
-            return;
+        if (lexEquals("}")) {
+            //this.token = this.lexico.nextToken();
+            reservadaOuIdentificador();
         }
-
         if (this.token.getTipo() == Token.TIPO_OPERADOR_ARITMETICO) {
             tiposAtribuicao();
         } else {

@@ -1,9 +1,10 @@
 main(){
-abc
-
+    if (int i) //deve dar erro
 }
 
-$
+int main(){
+    
+}
 
 
 
