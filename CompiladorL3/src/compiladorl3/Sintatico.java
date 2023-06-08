@@ -13,7 +13,6 @@ public class Sintatico {
         this.lexico = lexico;
     }
 
-    :(main(){
 
 
     
