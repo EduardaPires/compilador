@@ -110,6 +110,9 @@ public class Sintatico {
         }
         
         if (this.token.getTipo() == Token.TIPO_IDENTIFICADOR) {
+            if (!idList.contains(getTokenLex())) {
+                throw new RuntimeException("Essa variável ainda não foi declarada: '" + getTokenLex() + "'");
+            }
             this.ATRIBUICAO();
             this.token = this.lexico.nextToken();
             this.comando();
@@ -155,7 +158,6 @@ public class Sintatico {
     private void expressao(){
 
         this.bloco();
-
         this.token = this.lexico.nextToken();
         
         if(this.token.getLexema().equals("else")){
