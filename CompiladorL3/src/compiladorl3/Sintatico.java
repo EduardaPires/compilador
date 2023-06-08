@@ -17,9 +17,6 @@ public class Sintatico {
         idList = new ArrayList<>();
     }
 
-
-
-    
     public void mainDeclaration() {// S determina estado inicial
         this.token = this.lexico.nextToken();
 
@@ -71,6 +68,10 @@ public class Sintatico {
             if (this.token.getTipo() != Token.TIPO_IDENTIFICADOR) {
                 throw new RuntimeException("Nome de variável inválida");
             } else {
+                if (idList.contains(getTokenLex())) {
+                    throw new RuntimeException("Já existe uma variável chamada '" + getTokenLex() + "'");
+                }
+                idList.add(token.getLexema());
                 this.token = this.lexico.nextToken();
             }
 
@@ -95,25 +96,28 @@ public class Sintatico {
         //comando basico ou iteração
     private void comando() {
 
-        if ((this.token.getTipo() == Token.TIPO_PALAVRA_RESERVADA)) {
-            if (lexEquals("if")) {
-                //this.comandos --> ve se é if ou while e a partir disso leva pra func dif
-                this.expressao();
-                //this.token = this.lexico.nextToken(); 
-                this.comando();
-            }
-            
-            if(lexEquals("while")){
-                this.bloco();
-                this.token = this.lexico.nextToken();
-                this.comando();
-            }
-        } else if (this.token.getTipo() == Token.TIPO_IDENTIFICADOR) {
+        //if ((this.token.getTipo() == Token.TIPO_PALAVRA_RESERVADA)) {
+        if (lexEquals("if")) {
+            //this.comandos --> ve se é if ou while e a partir disso leva pra func dif
+            this.expressao();
+            //this.token = this.lexico.nextToken(); 
+            this.comando();
+        }
+        if(lexEquals("while")){
+            this.bloco();
+            this.token = this.lexico.nextToken();
+            this.comando();
+        }
+        
+        if (this.token.getTipo() == Token.TIPO_IDENTIFICADOR) {
             this.ATRIBUICAO();
             this.token = this.lexico.nextToken();
             this.comando();
-        }else{
+        }
+        
+        if (this.token.getTipo() == Token.TIPO_PALAVRA_RESERVADA){
             this.declararVar();
+            this.comando();
         }
         //volta para o bloco main
     }
