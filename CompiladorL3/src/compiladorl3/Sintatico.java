@@ -59,29 +59,22 @@ public class Sintatico {
         }
         this.token = this.lexico.nextToken(); // pega próximo token.
 
-        this.reservadaOuIdentificador(); //reservada=if,else,while,double,int ou nome de variavel (semantico irá identificar se a variavel já foi declarada)
-        /*
-         * Ao chegar aqui nosso código está assim:
-         * main(){
-         * aqui ele vai entrar na funcao CS
-         * 
-         */
-
-        // Esse if só será executado se não houver nenhum erro em CS e nas suas chamadas
-        // seguintes.
+        this.reservadaOuIdentificador(); // entra em função para ver se é reservada ou identificador.
+        
         if (!lexEquals("}")) { // verifica se fechou o "}" da main
             throw new RuntimeException("Você precisa fechar o bloco da main com '}'");
         }
     }
 
     private void reservadaOuIdentificador() {
+        if(this.token.getTipo() == Token.TIPO_FIM_CODIGO){
+            return;
+        }
 
         if ((this.token.getTipo() == Token.TIPO_PALAVRA_RESERVADA)) {
             this.reservada();
         } else if (this.token.getTipo() == Token.TIPO_IDENTIFICADOR) {
             this.ATRIBUICAO();
-        } else if (this.token.getTipo() == Token.TIPO_FIM_CODIGO) {
-            return;
         } else {
             throw new RuntimeException("Essa palavra não é válida dentro da main");
         }
