@@ -110,8 +110,7 @@ public class Sintatico {
         if (this.token.getTipo() != Token.TIPO_IDENTIFICADOR) {
             throw new RuntimeException("Nome de variável inválida");
         } else {
-            this.token = this.lexico.nextToken();
-            reservadaOuIdentificador();
+            ATRIBUICAO();
         }
     }
 
@@ -166,12 +165,12 @@ public class Sintatico {
     private void loopWhile() {
 
     }
+    
 
     private void tiposAtribuicao() {
         this.token = this.lexico.nextToken();
         if (this.token.getTipo() == Token.TIPO_IDENTIFICADOR) {
-            this.token = this.lexico.nextToken();
-            reservadaOuIdentificador(); // volta para primeira função do main
+            verificarOperadores(); 
         } else if (this.token.getTipo() == Token.TIPO_REAL) {
             verificarOperadores();
         } else {
@@ -186,8 +185,7 @@ public class Sintatico {
             return;
         }
 
-        if (getTokenLex().equals("+") || getTokenLex().equals("-")
-                || getTokenLex().equals("*") || getTokenLex().equals("/")) {
+        if (this.token.getTipo() == Token.TIPO_OPERADOR_ARITMETICO) {
             tiposAtribuicao();
         } else {
             throw new RuntimeException("Há um valor inválido na atribuição!");
