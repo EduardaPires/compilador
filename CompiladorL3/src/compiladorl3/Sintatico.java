@@ -56,7 +56,7 @@ public class Sintatico {
         //this.reservadaOuIdentificador(); 
         this.comando();
         
-        if(!lexEquals("}")){
+        if(lexEquals("}")){
             System.out.println("Código rodou bem!");
             return;  // corrigido problema de fechamento da main (Digs).
         }
@@ -75,10 +75,17 @@ public class Sintatico {
                 throw new RuntimeException("Nome de variável inválida");
             } else {
                 this.token = this.lexico.nextToken();
-                if (!lexEquals(";")){
-                    throw new RuntimeException("Você não colocou o ; poxa :(");
-                }
+            }
+
+            if(getTokenLex().equals("=")){
                 this.token = this.lexico.nextToken();
+            }else{
+                throw new RuntimeException("Declaração de variável deve ser com '=' !");
+            }
+
+            if((this.token.getTipo() == Token.TIPO_REAL) ||
+             this.token.getTipo() == Token.TIPO_IDENTIFICADOR ){
+                
             }
         }
 
@@ -104,6 +111,8 @@ public class Sintatico {
             this.ATRIBUICAO();
             this.token = this.lexico.nextToken();
             this.comando();
+        }else if(this.getTokenLex().equals("=")){
+            
         }
         //volta para o bloco main
     }
@@ -200,7 +209,7 @@ public class Sintatico {
         this.token = this.lexico.nextToken();
 
         if (getTokenLex().equals("=")) {
-  //          tiposAtribuicao();
+           this.comando();
         } else {
             throw new RuntimeException("A atribuição deve ser feita com '='' !");
         }
