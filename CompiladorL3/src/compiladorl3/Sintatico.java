@@ -1,5 +1,7 @@
 package compiladorl3;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author rod e duds
@@ -8,9 +10,11 @@ package compiladorl3;
 public class Sintatico {
     private Lexico lexico;
     private Token token;
+    private ArrayList<String> idList;
 
     public Sintatico(Lexico lexico) {
         this.lexico = lexico;
+        idList = new ArrayList<>();
     }
 
 
