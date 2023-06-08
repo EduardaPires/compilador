@@ -226,6 +226,8 @@ public class Sintatico {
         if (this.token.getTipo() == Token.TIPO_OPERADOR_ARITMETICO){
             this.token = this.lexico.nextToken();
             this.operacoes();
+        }else{
+            throw new RuntimeException("Coloque um operador aritmético!!");
         }
 
 
