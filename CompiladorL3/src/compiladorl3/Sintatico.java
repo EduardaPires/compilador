@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package compiladorl3;
 
 /**
@@ -18,7 +13,7 @@ public class Sintatico {
         this.lexico = lexico;
     }
 
-    :(main(){
+    // :(main(){
 
 
     
@@ -65,7 +60,7 @@ public class Sintatico {
         }
         this.token = this.lexico.nextToken(); // pega próximo token.
 
-        this.reservadaOuIdentificador();
+        this.reservadaOuIdentificador(); //reservada=if,else,while,double,int ou nome de variavel (semantico irá identificar se a variavel já foi declarada)
         /*
          * Ao chegar aqui nosso código está assim:
          * main(){
@@ -96,7 +91,7 @@ public class Sintatico {
     private void reservada() {
         if (lexEquals("int") || lexEquals("float") || lexEquals("double")) { // se for igual a tipo identificador, é pq                                                              // faremos atribuição
             this.declararVar();
-        } else if (lexEquals("if") || lexEquals("else")) {
+        } else if (lexEquals("if") || lexEquals("else") ) {
             this.condicional();
         } else if (lexEquals("while")) {
             this.loopWhile();
@@ -150,16 +145,35 @@ public class Sintatico {
         }
 
         this.token = this.lexico.nextToken();
+        this.reservadaOuIdentificador();
 
-        this.analisarBlocoCodigo();
+        //this.analisarBlocoCodigo();
 
         if (lexEquals("else")) {
 
             this.token = this.lexico.nextToken();
 
             // Chama a função para análise do bloco de código do "else"
-            this.analisarBlocoCodigo();
+           // this.analisarBlocoCodigo();
         }
+    }
+
+    private void analisarExpressao(){
+        if ((this.token.getTipo() == Token.TIPO_IDENTIFICADOR)) {
+            this.token = this.lexico.nextToken();
+        } else {
+            throw new RuntimeException("Tem que ser uma condição miseravi");
+        }
+
+        if ((this.token.getTipo() == Token.TIPO_OPERADOR_RELACIONAL)) {
+            this.token = this.lexico.nextToken();
+        }
+
+        if ((this.token.getTipo() == Token.TIPO_IDENTIFICADOR)) {
+        
+        }
+
+
     }
 
     private void loopWhile() {
