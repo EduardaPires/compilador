@@ -4,7 +4,7 @@ main(){
     int a;
     
     if(a == b){
-        a = 10 + 20 * b;
+        a = 10 - 20 + b;
         if (b==a) {
             int a = 10;
         }
