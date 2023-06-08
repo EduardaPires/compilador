@@ -6,9 +6,8 @@ main(){
     if(a == b){
         a = 10 + 20 * b;
         if (b==a) {
-            int b;
+            int a = 10;
         }
     } 
-
 
  } $
