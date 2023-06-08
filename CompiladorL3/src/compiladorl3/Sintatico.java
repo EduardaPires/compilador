@@ -38,15 +38,6 @@ public class Sintatico {
         this.token = this.lexico.nextToken();
 
         this.insideMainBlock(); // chama o B (entra no B)
-
-        // só continua para esse if se as chamadas das funções seguintes não der erro
-        // algum.
-        if (this.token.getTipo() == Token.TIPO_FIM_CODIGO) {
-            System.out.println("Tudo certo com seu código!");
-        } else {
-            throw new RuntimeException("Algum erro ocorreu.");
-            // teste
-        }
     }
 
     private void end(){
@@ -61,73 +52,70 @@ public class Sintatico {
             throw new RuntimeException("Você precisa abrir o bloco da main com '{'");
         }
         this.token = this.lexico.nextToken(); // pega próximo token.
-
+        this.declararVar();
+        //this.reservadaOuIdentificador(); 
+        this.comando();
+        
         if(lexEquals("}")){
             this.token = this.lexico.nextToken();
             end();
         }
         else {
-            this.reservadaOuIdentificador(); 
+            throw new RuntimeException("Você precisa fechar o bloco da main com '}'");
         }// entra em função para ver se é reservada ou identificador.
         
     }
 
-    //comando basico ou iteração
-    private void reservadaOuIdentificador() {
+    
+    private void declararVar() {
+
+        if (lexEquals("int") || lexEquals("float")|| lexEquals("char")) {
+            this.token = this.lexico.nextToken();
+            if (this.token.getTipo() != Token.TIPO_IDENTIFICADOR) {
+                throw new RuntimeException("Nome de variável inválida");
+            } else {
+                this.token = this.lexico.nextToken();
+                if (!lexEquals(";")){
+                    throw new RuntimeException("Você não colocou o ; poxa :(");
+                }
+                this.token = this.lexico.nextToken();
+            }
+        }
+
+    }
+
+        //comando basico ou iteração
+    private void comando() {
 
         if ((this.token.getTipo() == Token.TIPO_PALAVRA_RESERVADA)) {
-            this.reservada();
+            if (lexEquals("if")) {
+                //this.comandos --> ve se é if ou while e a partir disso leva pra func dif
+                this.expressao();
+                this.token = this.lexico.nextToken(); 
+                this.comando();
+            }
+            
+            if(lexEquals("while")){
+                this.bloco();
+                this.token = this.lexico.nextToken();
+                this.comando();
+            }
         } else if (this.token.getTipo() == Token.TIPO_IDENTIFICADOR) {
             this.ATRIBUICAO();
-        } else {
-            throw new RuntimeException("Essa palavra não é válida dentro da main");
+            this.token = this.lexico.nextToken();
+            this.comando();
         }
+        //volta para o bloco main
     }
 
-    private void reservada() {
-        if (lexEquals("int") || lexEquals("float") || lexEquals("double")) { // se for igual a tipo identificador, é pq                                                              // faremos atribuição
-            this.declararVar();
-        } else if (lexEquals("if") || lexEquals("else") ) {
-            this.condicional();
-        } else if (lexEquals("while")) {
-            this.loopWhile();
-        } else {
-            throw new RuntimeException("o que misera tu botou ai bixo");
-        }
-    }
-
-    private void declararVar() {
+    private void bloco(){
+        
         this.token = this.lexico.nextToken();
-        if (this.token.getTipo() != Token.TIPO_IDENTIFICADOR) {
-            throw new RuntimeException("Nome de variável inválida");
-        } else {
-            ATRIBUICAO();
-        }
-    }
-
-    private void ATRIBUICAO() {
-        this.token = this.lexico.nextToken();
-
-        if (getTokenLex().equals("=")) {
-            tiposAtribuicao();
-        } else {
-            throw new RuntimeException("A atribuição deve ser feita com '='' !");
-        }
-    }
-
-    private void condicional() {
-
-        if (!lexEquals("if")) {
-            throw new RuntimeException("Palavra-chave 'if' esperada na estrutura condicional.");
-        }
-        this.token = this.lexico.nextToken();
-
         if (!lexEquals("(")) {
             throw new RuntimeException("Falta abrir parênteses na estrutura condicional.");
         }
 
         this.token = this.lexico.nextToken();
-
         this.analisarExpressao();
 
         if (!lexEquals(")")) {
@@ -141,29 +129,80 @@ public class Sintatico {
         }
 
         this.token = this.lexico.nextToken();
-
-        this.reservadaOuIdentificador();
+        this.declararVar();
+        //this.reservadaOuIdentificador(); 
+        this.comando();
 
         if(!lexEquals("}")){
             throw new RuntimeException("Feche as chaves do if!");
         }
-        this.token = this.lexico.nextToken();
+    }
 
-        if (!lexEquals("else")) {
-            return;
-        }
+    private void expressao(){
 
-        if(lexEquals("else")){
+        this.bloco();
+        //this.token = this.lexico.nextToken();
+        
+        if(this.lexico.nextToken().getLexema().equals("else")){
             this.token = this.lexico.nextToken();
+            //this.token = this.lexico.nextToken();
+            if(!lexEquals("{")){
+                throw new RuntimeException("Abra as chaves!");
+            }
+    
+            this.token = this.lexico.nextToken();
+            this.declararVar();
+            //this.reservadaOuIdentificador(); 
+            this.comando();
+    
+            if(!lexEquals("}")){
+                throw new RuntimeException("Feche as chaves!");
+            }
         }
+    }
 
-        if(!lexEquals("{")){
-            throw new RuntimeException("Abra as chaves do else!");
-        }
+
+    
+    // private void declararVar() {
+    //     this.token = this.lexico.nextToken();
+    //     if (this.token.getTipo() != Token.TIPO_IDENTIFICADOR) {
+    //         throw new RuntimeException("Nome de variável inválida");
+    //     } else {
+    //         ATRIBUICAO();
+    //     }
+    // }
+
+    // //comando basico ou iteração
+    // private void reservadaOuIdentificador() {
+
+    //     if ((this.token.getTipo() == Token.TIPO_PALAVRA_RESERVADA)) {
+    //         this.reservada();
+    //     } else if (this.token.getTipo() == Token.TIPO_IDENTIFICADOR) {
+    //         this.ATRIBUICAO();
+    //     }
+    //     this.token = this.lexico.nextToken();
+    //     //volta para o bloco main
+    // }
+
+    // private void reservada() {
+    //     if (lexEquals("int") || lexEquals("float") || lexEquals("double")) { // se for igual a tipo identificador, é pq                                                              // faremos atribuição
+    //         this.declararVar();
+    //     } else if (lexEquals("if") || lexEquals("else") ) {
+    //         this.condicional();
+    //     } else if (lexEquals("while")) {
+    //         this.loopWhile();
+    //     } else {
+    //         throw new RuntimeException("o que misera tu botou ai bixo");
+    //     }
+    // }
+
+    private void ATRIBUICAO() {
         this.token = this.lexico.nextToken();
-        this.reservadaOuIdentificador();
-        if(!lexEquals("}")){
-            throw new RuntimeException("Feche as chaves do else!");
+
+        if (getTokenLex().equals("=")) {
+  //          tiposAtribuicao();
+        } else {
+            throw new RuntimeException("A atribuição deve ser feita com '='' !");
         }
     }
 
@@ -180,51 +219,47 @@ public class Sintatico {
             throw new RuntimeException("Era esperado operador relacional");
         }
 
-        if ((this.token.getTipo() == Token.TIPO_IDENTIFICADOR)) {
+        if (this.token.getTipo() == Token.TIPO_IDENTIFICADOR || this.token.getTipo() == Token.TIPO_CHAR || this.token.getTipo() == Token.TIPO_REAL || this.token.getTipo() == Token.TIPO_INTEIRO) {
             this.token = this.lexico.nextToken();
         }else{
-            throw new RuntimeException("Era esperado um identificador");
+            throw new RuntimeException("Não to entendendo com o que você ta querendo comparar a variável :(");
         }
-        return;
 
     }
 
-    private void loopWhile() {
+    // private void loopWhile() {
 
-    }
+    // }
     
 
-    private void tiposAtribuicao() {
+    // private void tiposAtribuicao() {
 
-        if (lexEquals("}")) {
-            return;
-        }
-        this.token = this.lexico.nextToken();
-        if (this.token.getTipo() == Token.TIPO_IDENTIFICADOR) {
-            verificarOperadores(); 
-        } else if (this.token.getTipo() == Token.TIPO_REAL || this.token.getTipo() == Token.TIPO_INTEIRO) {
-            verificarOperadores();
-        } else if (this.token.getTipo() == Token.TIPO_FIM_CODIGO) {
-            return;
-        } else {
-            throw new RuntimeException("Há um valor inválido na atribuição!");
-        }
-    }
+    //     this.token = this.lexico.nextToken();
+    //     if (this.token.getTipo() == Token.TIPO_IDENTIFICADOR) {
+    //         verificarOperadores(); 
+    //     } else if (this.token.getTipo() == Token.TIPO_REAL || this.token.getTipo() == Token.TIPO_INTEIRO) {
+    //         verificarOperadores();
+    //     } else if (this.token.getTipo() == Token.TIPO_FIM_CODIGO) {
+    //         return;
+    //     } else {
+    //         throw new RuntimeException("Há um valor inválido na atribuição!");
+    //     }
+    // }
 
-    private void verificarOperadores() {
-        this.token = this.lexico.nextToken();
+    // private void verificarOperadores() {
+    //     this.token = this.lexico.nextToken();
 
-        if (lexEquals("}")) {
-            //this.token = this.lexico.nextToken();
-            reservadaOuIdentificador();
-        }
-        if (this.token.getTipo() == Token.TIPO_OPERADOR_ARITMETICO) {
-            tiposAtribuicao();
-        } else {
-            throw new RuntimeException("Há um valor inválido na atribuição!");
-        }
+    //     if (lexEquals("}")) {
+    //         //this.token = this.lexico.nextToken();
+    //         reservadaOuIdentificador();
+    //     }
+    //     if (this.token.getTipo() == Token.TIPO_OPERADOR_ARITMETICO) {
+    //         tiposAtribuicao();
+    //     } else {
+    //         throw new RuntimeException("Há um valor inválido na atribuição!");
+    //     }
 
-    }
+    // }
 
     // private void E(){
     // this.T();
