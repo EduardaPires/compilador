@@ -143,7 +143,11 @@ public class Sintatico {
             throw new RuntimeException("Falta fechar parênteses na estrutura condicional.");
         }
 
-        this.token = this.lexico.nextToken();
+        if(!lexEquals("{")){
+            throw new RuntimeException("Abra as chaves do if!");
+        }
+
+        
         this.reservadaOuIdentificador();
 
         //this.analisarBlocoCodigo();
@@ -161,17 +165,21 @@ public class Sintatico {
         if ((this.token.getTipo() == Token.TIPO_IDENTIFICADOR)) {
             this.token = this.lexico.nextToken();
         } else {
-            throw new RuntimeException("Tem que ser uma condição miseravi");
+            throw new RuntimeException("Era esperado um identificador");
         }
 
         if ((this.token.getTipo() == Token.TIPO_OPERADOR_RELACIONAL)) {
             this.token = this.lexico.nextToken();
+        }else{
+            throw new RuntimeException("Era esperado operador relacional");
         }
 
         if ((this.token.getTipo() == Token.TIPO_IDENTIFICADOR)) {
-        
+            this.token = this.lexico.nextToken();
+        }else{
+            throw new RuntimeException("Era esperado um identificador");
         }
-
+        return;
 
     }
 
