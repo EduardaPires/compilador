@@ -18,9 +18,7 @@ public class Sintatico {
         this.lexico = lexico;
     }
 
-    :(main(){
-
-
+   
     
     public void mainDeclaration() {// S determina estado inicial
         this.token = this.lexico.nextToken();
