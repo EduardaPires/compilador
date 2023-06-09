@@ -175,6 +175,7 @@ public class Sintatico {
             if(!lexEquals("}")){
                 throw new RuntimeException("Fecha as chaves, poxa! :(");
             }
+            this.token = this.lexico.nextToken();
         }
     }
 
@@ -190,7 +191,7 @@ public class Sintatico {
 
         this.operacoes();
         if (!getTokenLex().equals(";")){
-            throw new RuntimeException("Tem que finalizar com ; :(");
+            throw new RuntimeException("Se sua atribuição não tiver mais operações, ela deve finalizar com ; :(");
         }
     }
 
